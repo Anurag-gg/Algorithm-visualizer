@@ -11,7 +11,8 @@ def bubble_sort(sort_size):
         width=dpg.get_viewport_client_width(),
         height=dpg.get_viewport_client_height(),
     ):
-        inputs = random.sample(range(1, sort_size + 1), sort_size)
+        y_value = random.sample(range(1, sort_size + 1), sort_size)
+        x_value = [x for x in range(1, sort_size + 1)]
 
         with dpg.plot(height=-1, width=-1):
             # create x axis
@@ -23,26 +24,41 @@ def bubble_sort(sort_size):
                 dpg.mvYAxis, no_gridlines=True, tag="y_axis", no_tick_labels=True
             )
             # add series to y axis
-            graphs = dpg.add_bar_series(
-                [x for x in range(1, sort_size + 1)],
-                inputs,
-                parent="y_axis"
+            dpg.add_bar_series(
+                x_value,
+                y_value,
+                parent="y_axis",
+                tag="graphs"
             )
             #apply theme
-            dpg.bind_item_theme(graphs, "plot_theme")
+            dpg.bind_item_theme("graphs", "plot_theme")
 
-            for i in range(sort_size - 1):
-                for j in range(sort_size - 1 - i):
-                    if inputs[j] > inputs[j + 1]:
-                        inputs[j], inputs[j + 1] = inputs[j + 1], inputs[j]
-                    time.sleep(0.01)
-                    dpg.delete_item(graphs)
-                    graphs = dpg.add_bar_series(
-                        [x for x in range(1, sort_size + 1)], inputs, parent="y_axis"
-                    )
-                    dpg.bind_item_theme(graphs, "plot_theme")
+            #ending the visual
+            def end():
+                dpg.delete_item("sort_window")
+                dpg.delete_item("click_end")
 
-            dpg.bind_item_theme(graphs, "plot_theme_final")
-            graphs = dpg.add_bar_series(
-                        [x for x in range(1, sort_size + 1)], inputs, parent="y_axis"
-                    )
+            #sort logic
+            def sort():
+                dpg.delete_item("click")
+                for i in range(sort_size - 1):
+                    for j in range(sort_size - 1 - i):
+                        if y_value[j] > y_value[j + 1]:
+                            y_value[j], y_value[j + 1] = y_value[j + 1], y_value[j]
+                        time.sleep(0.01)
+                        dpg.delete_item("graphs")
+                        dpg.add_bar_series(
+                            x_value, y_value, parent="y_axis",tag="graphs"
+                        )
+                        dpg.bind_item_theme("graphs", "plot_theme")
+                dpg.bind_item_theme("graphs", "plot_theme_final")
+
+                #mouse/keyboard input to end the visualization
+                with dpg.handler_registry(tag="click_end"):
+                    dpg.add_mouse_down_handler(callback=end)
+                    dpg.add_key_down_handler(callback=end)
+
+            #mouse/keyboard input to start the visualization
+            with dpg.handler_registry(tag="click"):
+                dpg.add_mouse_down_handler(callback=sort)
+                dpg.add_key_down_handler(callback=sort)
