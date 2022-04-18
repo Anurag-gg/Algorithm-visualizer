@@ -1,7 +1,8 @@
 import dearpygui.dearpygui as dpg
-import sorting
+import base
+import os
 
-SORTING_ALGOS = ("Bubble Sort", "Selection Sort", "Merge Sort")
+SORTING_ALGOS = [os.path.splitext(filename)[0] for filename in os.listdir("sorting") if not filename.startswith("__")]
 MAX_WIDTH = 800
 MAX_HEIGHT = 600
 
@@ -15,20 +16,18 @@ def choice_callback(sender):
 
 
 def button_callback():
-    sort_size = dpg.get_value("sort_size")
-    sort_choice = dpg.get_value("sort_choice")
     #dpg.delete_item("Options")
-    sorting.bubble_sort(sort_size)
+    base.sort()
 
 
 dpg.create_context()
 dpg.create_viewport(title="Sorting Visualizer", width=MAX_WIDTH, height=MAX_HEIGHT)
 
-with dpg.window(label="Options", tag="Options", width=MAX_WIDTH, height=MAX_HEIGHT):
+with dpg.window(label="Options", tag="Options", width=MAX_WIDTH, height=MAX_HEIGHT,no_resize=True):
     dpg.add_text("Select the sorting algorithm")
     dpg.add_combo(
         items=SORTING_ALGOS,
-        default_value="Bubble Sort",
+        default_value="bubble_sort",
         tag="sort_choice",
         callback=choice_callback,
     )
