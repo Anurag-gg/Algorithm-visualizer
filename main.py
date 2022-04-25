@@ -2,7 +2,11 @@ import dearpygui.dearpygui as dpg
 import base
 import os
 
-SORTING_ALGOS = [os.path.splitext(filename)[0] for filename in os.listdir("sorting") if not filename.startswith("__")]
+SORTING_ALGOS = [
+    os.path.splitext(filename)[0]
+    for filename in os.listdir("sorting")
+    if not filename.startswith("__")
+]
 MAX_WIDTH = 800
 MAX_HEIGHT = 600
 
@@ -16,14 +20,24 @@ def choice_callback(sender):
 
 
 def button_callback():
-    #dpg.delete_item("Options")
+    # dpg.delete_item("Options")
     base.sort()
 
 
 dpg.create_context()
-dpg.create_viewport(title="Sorting Visualizer", width=MAX_WIDTH, height=MAX_HEIGHT)
+dpg.configure_app(auto_device=True)
+dpg.create_viewport(
+    title="Sorting Visualizer", width=MAX_WIDTH, height=MAX_HEIGHT, resizable=False
+)
 
-with dpg.window(label="Options", tag="Options", width=MAX_WIDTH, height=MAX_HEIGHT,no_resize=True):
+with dpg.window(
+    label="Options",
+    tag="Options",
+    width=MAX_WIDTH,
+    height=MAX_HEIGHT,
+    no_close=True,
+    no_collapse=True,
+):
     dpg.add_text("Select the sorting algorithm")
     dpg.add_combo(
         items=SORTING_ALGOS,
@@ -43,15 +57,26 @@ with dpg.window(label="Options", tag="Options", width=MAX_WIDTH, height=MAX_HEIG
         height=40,
     )
 
-    #initial theme for graphs
+    # initial theme for graphs
     with dpg.theme(tag="plot_theme"):
         with dpg.theme_component(dpg.mvBarSeries):
-            dpg.add_theme_color(dpg.mvPlotCol_Fill, (150, 255, 0), category=dpg.mvThemeCat_Plots)
-    
-    #final theme for graphs
+            dpg.add_theme_color(
+                dpg.mvPlotCol_Fill, (150, 255, 0), category=dpg.mvThemeCat_Plots
+            )
+
+    # highlight theme for graphs
+    with dpg.theme(tag="plot_theme_highlight"):
+        with dpg.theme_component(dpg.mvBarSeries):
+            dpg.add_theme_color(
+                dpg.mvPlotCol_Fill, (255, 102, 0), category=dpg.mvThemeCat_Plots
+            )
+
+    # final theme for graphs
     with dpg.theme(tag="plot_theme_final"):
         with dpg.theme_component(dpg.mvBarSeries):
-            dpg.add_theme_color(dpg.mvPlotCol_Fill, (7,83,138), category=dpg.mvThemeCat_Plots)
+            dpg.add_theme_color(
+                dpg.mvPlotCol_Fill, (7, 83, 138), category=dpg.mvThemeCat_Plots
+            )
 
 dpg.setup_dearpygui()
 dpg.show_viewport()
