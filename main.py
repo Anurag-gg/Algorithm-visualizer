@@ -47,7 +47,11 @@ with dpg.window(
     )
     dpg.add_text("Drag to choose the number of elements")
     dpg.add_slider_int(
-        default_value=50,min_value=2, max_value=100, tag="sort_size", callback=size_callback
+        default_value=50,
+        min_value=2,
+        max_value=100,
+        tag="sort_size",
+        callback=size_callback,
     )
     dpg.add_text("")
     dpg.add_button(
@@ -69,6 +73,13 @@ with dpg.window(
         with dpg.theme_component(dpg.mvBarSeries):
             dpg.add_theme_color(
                 dpg.mvPlotCol_Fill, (255, 102, 0), category=dpg.mvThemeCat_Plots
+            )
+
+    # completed theme for graphs
+    with dpg.theme(tag="plot_theme_completed"):
+        with dpg.theme_component(dpg.mvBarSeries):
+            dpg.add_theme_color(
+                dpg.mvPlotCol_Fill, (102, 153, 0), category=dpg.mvThemeCat_Plots
             )
 
     # final theme for graphs
