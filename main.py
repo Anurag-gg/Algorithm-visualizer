@@ -47,7 +47,7 @@ with dpg.window(
     )
     dpg.add_text("Drag to choose the number of elements")
     dpg.add_slider_int(
-        default_value=50, max_value=100, tag="sort_size", callback=size_callback
+        default_value=50,min_value=2, max_value=100, tag="sort_size", callback=size_callback
     )
     dpg.add_text("")
     dpg.add_button(
