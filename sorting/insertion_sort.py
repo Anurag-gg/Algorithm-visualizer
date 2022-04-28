@@ -13,15 +13,25 @@ def insertion_sort(sender, app_data, user_data):
 
             if dpg.does_item_exist("graphs"):
                 dpg.delete_item("graphs")
+            if dpg.does_item_exist("completed"):
+                dpg.delete_item("completed")
             if dpg.does_item_exist("highlight"):
                 dpg.delete_item("highlight")
 
             dpg.add_bar_series(
-                [x for x in x_value if x != x_value[j + 1]],
-                [y for y in y_value if y != y_value[j + 1]],
+                [x for x in x_value if x != x_value[j + 1] and x != x_value[i]],
+                [y for y in y_value if y != y_value[j + 1] and y != y_value[i]],
                 parent="y_axis",
                 tag="graphs",
             )
+
+            dpg.add_bar_series(
+                [x_value[i]],
+                [y_value[i]],
+                parent="y_axis",
+                tag="completed",
+            )
+
             dpg.add_bar_series(
                 [x_value[j + 1]],
                 [y_value[j + 1]],
@@ -30,6 +40,7 @@ def insertion_sort(sender, app_data, user_data):
             )
 
             dpg.bind_item_theme("graphs", "plot_theme")
+            dpg.bind_item_theme("completed", "plot_theme_completed")
             dpg.bind_item_theme("highlight", "plot_theme_highlight")
 
             y_value[j], y_value[j + 1] = y_value[j + 1], y_value[j]
@@ -37,6 +48,8 @@ def insertion_sort(sender, app_data, user_data):
 
     if dpg.does_item_exist("graphs"):
         dpg.delete_item("graphs")
+    if dpg.does_item_exist("completed"):
+        dpg.delete_item("completed")
     if dpg.does_item_exist("highlight"):
         dpg.delete_item("highlight")
 
